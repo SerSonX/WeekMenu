@@ -7,8 +7,8 @@ using Xamarin.Forms;
 
 namespace WeekMenu
 {
-	public class AboutPage : ContentPage
-	{
+    public class AboutPage : ContentPage
+    {
         public AboutPage()
         {
             Button donate = new Button
@@ -35,7 +35,7 @@ namespace WeekMenu
                         Text = "Научный руководитель: Анфалов Евгений (Anfalov)."
                     },
                     donate
-                    
+
                 }
             };
 
@@ -46,4 +46,5 @@ namespace WeekMenu
             await Navigation.PushAsync(new ContentPage());
         }
     }
+    
 }

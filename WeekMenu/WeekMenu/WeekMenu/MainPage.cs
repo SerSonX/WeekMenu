@@ -11,8 +11,10 @@ namespace WeekMenu
 	{
 		public MainPage ()
 		{
-            Master = new MasterPage();
-            Detail = new NavigationPage(new AboutPage());
-		}
+            Master = new MasterPage(this);
+            //Detail = new NavigationPage(new AboutPage());
+            Detail = new NavigationPage(new ProductsPage());
+
+        }
 	}
 }
