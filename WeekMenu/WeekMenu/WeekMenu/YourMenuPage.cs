@@ -41,9 +41,9 @@ namespace WeekMenu
                         HorizontalOptions = LayoutOptions.Center,
                         VerticalOptions = LayoutOptions.Center,
                         Children =
-                                {
-                                            dayLabel
-                                }
+                         {
+                            dayLabel
+                         }
                     }
                 };
             });

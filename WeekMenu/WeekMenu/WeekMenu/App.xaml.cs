@@ -9,11 +9,23 @@ namespace WeekMenu
 {
 	public partial class App : Application
 	{
-		public App ()
+        public const string DATABASE_NAME = "product.db";
+        public static ProductRepository database;
+        public static ProductRepository Database
+        {
+            get
+            {
+                if (database == null)
+                {
+                    database = new ProductRepository(DATABASE_NAME);
+                }
+                return database;
+            }
+        }
+        public App ()
 		{
-			InitializeComponent();
-
-			MainPage = new WeekMenu.MainPage();
+            InitializeComponent();
+            MainPage = new WeekMenu.MainPage();
 		}
 
 		protected override void OnStart ()

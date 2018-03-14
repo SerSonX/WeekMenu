@@ -17,8 +17,11 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)DayMenu.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ISQLite.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MainPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MasterPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Product.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ProductRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ProductsPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YourMenuPage.cs" />
   </ItemGroup>
