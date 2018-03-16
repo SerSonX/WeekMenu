@@ -12,7 +12,7 @@ namespace WeekMenu
         {
             string databasePath = DependencyService.Get<ISQLite>().GetDatabasePath(filename);
             database = new SQLiteConnection(databasePath);
-            database.CreateTable<Product>();
+            //database.CreateTable<Product>();
         }
         public IEnumerable<Product> GetItems()
         {

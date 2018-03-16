@@ -64,6 +64,9 @@
     <Compile Include="SQLite_Android.cs" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidAsset Include="Assets\weekmenu.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AndroidAsset>
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
   </ItemGroup>

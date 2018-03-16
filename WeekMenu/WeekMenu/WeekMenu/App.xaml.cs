@@ -9,7 +9,7 @@ namespace WeekMenu
 {
 	public partial class App : Application
 	{
-        public const string DATABASE_NAME = "product.db";
+        public const string DATABASE_NAME = "weekmenu.db";
         public static ProductRepository database;
         public static ProductRepository Database
         {

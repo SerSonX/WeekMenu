@@ -37,10 +37,18 @@ namespace WeekMenu.UWP
         /// will be used such as when the application is launched to open a specific file.
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+
+        protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
-
-
+            // получаем имя базы данных
+            string databaseName = WeekMenu.App.DATABASE_NAME;
+            if (await Windows.Storage.ApplicationData.Current.LocalFolder.TryGetItemAsync(databaseName) == null)
+            {
+                // копируем бд из папки Assets
+                Windows.Storage.StorageFile databaseFile =
+                    await Package.Current.InstalledLocation.GetFileAsync($"Assets\\{databaseName}");
+                await databaseFile.CopyAsync(Windows.Storage.ApplicationData.Current.LocalFolder);
+            }
             Frame rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,

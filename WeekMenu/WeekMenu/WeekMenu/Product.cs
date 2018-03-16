@@ -13,6 +13,6 @@ namespace WeekMenu
         public string Name { get; set; }
         public double Count { get; set; }
         public string Unit { get; set; }
-        public DateTime expirationDate { get; set; }
+        public DateTime ExpirationDate { get; set; }
     }
 }

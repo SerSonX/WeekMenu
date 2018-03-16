@@ -102,6 +102,9 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="Assets\weekmenu.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="WeekMenu.UWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
