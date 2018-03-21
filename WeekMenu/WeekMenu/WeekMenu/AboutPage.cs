@@ -11,13 +11,8 @@ namespace WeekMenu
     {
         public AboutPage()
         {
-            Button donate = new Button
-            {
-                Text = "Donate",
-
-            };
-            donate.Clicked += Donate_Clicked;
             Title = "О нас";
+            BackgroundColor = Color.White;
             Content = new StackLayout
             {
                 Children =
@@ -32,18 +27,12 @@ namespace WeekMenu
                     },
                     new Label
                     {
-                        Text = "Научный руководитель: Анфалов Евгений (Anfalov)."
-                    },
-                    donate
+                        Text = "Научный руководитель: Анфалов Евгений (Anf)."
+                    }
 
                 }
             };
 
-        }
-
-        private async void Donate_Clicked(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new ContentPage());
         }
     }
     
