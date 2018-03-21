@@ -11,9 +11,13 @@ namespace WeekMenu
 	{
 		public MainPage ()
 		{
+
             Master = new MasterPage(this);
             //Detail = new NavigationPage(new AboutPage());
-            Detail = new NavigationPage(new ProductsPage());
+            Detail = new NavigationPage(new ProductsPage())
+            {
+                BarBackgroundColor = Color.FromHex("76ff03")
+            };
 
         }
 	}

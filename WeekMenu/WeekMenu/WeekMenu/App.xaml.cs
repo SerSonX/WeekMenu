@@ -10,14 +10,14 @@ namespace WeekMenu
 	public partial class App : Application
 	{
         public const string DATABASE_NAME = "weekmenu.db";
-        public static ProductRepository database;
-        public static ProductRepository Database
+        static Repository database;
+        public static Repository Database
         {
             get
             {
                 if (database == null)
                 {
-                    database = new ProductRepository(DATABASE_NAME);
+                    database = new Repository(DATABASE_NAME);
                 }
                 return database;
             }

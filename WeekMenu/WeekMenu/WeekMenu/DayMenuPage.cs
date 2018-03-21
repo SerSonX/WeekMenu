@@ -7,7 +7,7 @@ using Xamarin.Forms;
 
 namespace WeekMenu
 {
-	public class DayMenu : ContentPage
+	public class DayMenuPage : ContentPage
 	{
         int dayOfWeek;
 
@@ -33,8 +33,9 @@ namespace WeekMenu
             throw new ArgumentException("Argument must be from 1 to 7");
         }
 
-		public DayMenu (int dayOfWeek)
+		public DayMenuPage (int dayOfWeek)
 		{
+            BackgroundColor = Color.White;
             this.dayOfWeek = dayOfWeek;
             Title = dayByNumber(dayOfWeek);
 			Content = new StackLayout {

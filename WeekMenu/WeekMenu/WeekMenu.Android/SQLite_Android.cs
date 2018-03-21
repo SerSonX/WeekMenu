@@ -19,7 +19,20 @@ namespace WeekMenu.Droid
         {
             string documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             var path = Path.Combine(documentsPath, sqliteFilename);
-            return path;
+            if (!File.Exists(path))
+            {
+                var dbAssetStream = Forms.Context.Assets.Open(sqliteFilename);
+                var dbFileStream = new System.IO.FileStream(path, System.IO.FileMode.OpenOrCreate);
+                var buffer = new byte[1024];
+                int b = buffer.Length;
+                int length;
+                while ((length = dbAssetStream.Read(buffer, 0, b)) > 0)
+                    dbFileStream.Write(buffer, 0, length);
+                dbFileStream.Flush();
+                dbFileStream.Close();
+                dbAssetStream.Close();
+            }
+                return path;
         }
     }
 }

@@ -20,6 +20,7 @@ namespace WeekMenu
         MasterDetailPage mainPage;
 		public MasterPage (MasterDetailPage mdp)
 		{
+            BackgroundColor = Color.White;
             mainPage = mdp;
             Button about = new Button
             {
@@ -57,19 +58,28 @@ namespace WeekMenu
 
         private void Menu_Clicked(object sender, EventArgs e)
         {
-            mainPage.Detail = new NavigationPage(new YourMenuPage());
+            mainPage.Detail = new NavigationPage(new DaysPage())
+            {
+                BarBackgroundColor = Color.FromHex("76ff03")
+            };
             mainPage.IsPresented = false;
         }
 
         private void Products_Clicked(object sender, EventArgs e)
         {
-            mainPage.Detail = new NavigationPage(new ProductsPage());
+            mainPage.Detail = new NavigationPage(new ProductsPage())
+            {
+                BarBackgroundColor = Color.FromHex("76ff03")
+            };
             mainPage.IsPresented = false;
         }
 
         private void About_Clicked(object sender, EventArgs e)
         {
-            mainPage.Detail = new NavigationPage(new AboutPage());
+            mainPage.Detail = new NavigationPage(new AboutPage())
+            {
+                BarBackgroundColor = Color.FromHex("76ff03")
+            };
             mainPage.IsPresented = false;
         }
     }

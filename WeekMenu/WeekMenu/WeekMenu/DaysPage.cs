@@ -7,7 +7,7 @@ using Xamarin.Forms;
 
 namespace WeekMenu
 {
-	public class YourMenuPage : ContentPage
+	public class DaysPage : ContentPage
 	{
         class DayOfWeek
         {
@@ -27,8 +27,9 @@ namespace WeekMenu
             ItemsSource = daysOfWeek
         };
 
-        public YourMenuPage ()
+        public DaysPage ()
 		{
+            BackgroundColor = Color.White;
             listView.ItemTemplate = new DataTemplate(() =>
             {
                 Label dayLabel = new Label();
@@ -84,7 +85,7 @@ namespace WeekMenu
                     i = 7;
                     break;
             }
-            await Navigation.PushAsync(new DayMenu(i));
+            await Navigation.PushAsync(new DayMenuPage(i));
 
         }
     }

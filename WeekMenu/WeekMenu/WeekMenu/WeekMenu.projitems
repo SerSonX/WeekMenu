@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
@@ -16,13 +16,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)DayMenu.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DayMenuPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EditOrCreateProductPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ISQLite.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MainPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MasterPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Product.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ProductRepository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Repository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ProductsPage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)YourMenuPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DaysPage.cs" />
   </ItemGroup>
 </Project>
