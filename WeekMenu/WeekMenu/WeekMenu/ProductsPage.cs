@@ -26,15 +26,15 @@ namespace WeekMenu
                 nameLabel.HorizontalTextAlignment = TextAlignment.Center;
                 nameLabel.VerticalTextAlignment = TextAlignment.Center;
                 nameLabel.SetBinding(Label.TextProperty, "Name");
-                nameLabel.FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)) * 1;
+                nameLabel.FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Label)) * 1;
                 countAndUnitLabel.HorizontalTextAlignment = TextAlignment.Center;
                 countAndUnitLabel.VerticalTextAlignment = TextAlignment.Center;
                 countAndUnitLabel.SetBinding(Label.TextProperty, "CountAndUnit");
-                countAndUnitLabel.FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)) * 1;
+                countAndUnitLabel.FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Label)) * 1;
                 expirationDateLabel.HorizontalTextAlignment = TextAlignment.Center;
                 expirationDateLabel.VerticalTextAlignment = TextAlignment.Center;
                 expirationDateLabel.SetBinding(Label.TextProperty, "ExpirationDate");
-                expirationDateLabel.FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)) * 1;
+                expirationDateLabel.FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Label)) * 1;
                 Grid cellGrid = new Grid();
                 cellGrid.Children.Add(nameLabel, 0, 2, 0, 1);
                 cellGrid.Children.Add(countAndUnitLabel, 2, 3, 0, 1);
@@ -59,7 +59,7 @@ namespace WeekMenu
                 HorizontalTextAlignment = TextAlignment.Center,
                 VerticalTextAlignment= TextAlignment.Center,
                 FontSize =
-               Device.GetNamedSize(NamedSize.Medium, typeof(Label)) * 1.1
+               Device.GetNamedSize(NamedSize.Default, typeof(Label)) * 1.1
             }, 0, 2, 0, 1);
             titleGrid.Children.Add(new Label
             {
@@ -69,7 +69,7 @@ namespace WeekMenu
                 FontAttributes = FontAttributes.Bold,
                 Text = " Кол-во",
                 FontSize =
-               Device.GetNamedSize(NamedSize.Medium, typeof(Label)) * 1.1
+               Device.GetNamedSize(NamedSize.Default, typeof(Label)) * 1.1
             }, 2, 3, 0, 1);
             titleGrid.Children.Add(new Label
             {
@@ -79,7 +79,7 @@ namespace WeekMenu
                 FontAttributes = FontAttributes.Bold,
                 Text = " Срок годости",
                 FontSize =
-               Device.GetNamedSize(NamedSize.Medium, typeof(Label)) * 1.1
+               Device.GetNamedSize(NamedSize.Default, typeof(Label)) * 1.1
             }, 3, 5, 0, 1);
 
             ToolbarItem changeItem = new ToolbarItem
@@ -89,6 +89,8 @@ namespace WeekMenu
                 Priority = 0
             };
             changeItem.Clicked += ChangeItem_Clicked;
+
+            ToolbarItems.Add(changeItem);
 
             Content = new StackLayout
             {
