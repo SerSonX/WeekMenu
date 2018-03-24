@@ -13,11 +13,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)AboutPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AddIngridientsPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)DayMenuPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DishesPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DishPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EditOrCreateDishPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EditOrCreateProductPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HaventProducts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ISQLite.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MainPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MasterPage.cs" />

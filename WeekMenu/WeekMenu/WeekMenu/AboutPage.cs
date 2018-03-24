@@ -19,6 +19,10 @@ namespace WeekMenu
                 {
                     new Label
                     {
+                        Text = "Версия: 1.0"
+                    },
+                    new Label
+                    {
                         Text = "Это приложение является проектной работой."
                     },
                     new Label

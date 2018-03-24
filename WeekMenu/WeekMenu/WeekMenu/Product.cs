@@ -17,7 +17,7 @@ namespace WeekMenu
     public class Product
     {
         [PrimaryKey, AutoIncrement]
-        public int Id { get; set;}
+        public int Id { get; set; }
         public int NameId { get; set; }
         public double Count { get; set; }
         public string ExpirationDate { get; set; }
@@ -29,5 +29,49 @@ namespace WeekMenu
         public string Name { get; set; }
         public string CountAndUnit { get; set; }
         public string ExpirationDate { get; set; }
+
+    }
+
+    [Table("Dishes")]
+    public class Dish
+    {
+        [PrimaryKey, AutoIncrement]
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+
+    [Table("Ingredients")]
+    public class Ingredient
+    {
+        [PrimaryKey, AutoIncrement]
+        public int Id { get; set; }
+        public int DishId { get; set; }
+        public int ProductNameId { get; set; }
+        public double Count { get; set; }
+    }
+
+    public class IngredientView
+    {
+        [PrimaryKey, AutoIncrement]
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string CountAndUnit { get; set; }
+    }
+
+    public class DishesInDayView
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int Type { get; set; }
+    }
+
+    [Table("DaysAndDishes")]
+    public class DayAndDish
+    {
+        [PrimaryKey, AutoIncrement]
+        public int Id { get; set; }
+        public int Day { get; set; }
+        public int DishId { get; set; }
+        public int Type { get; set; }
     }
 }

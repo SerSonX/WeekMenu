@@ -9,22 +9,25 @@ namespace WeekMenu
 {
 	public class EditOrCreateProductPage : ContentPage
 	{
+        public delegate void EventHandler(object sender);
+        public event EventHandler Changed;
         int idOfProduct;
         Entry nameEnt = new Entry
         {
-            FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Label)) * 1,
+            FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Entry)) * 1,
         };
         Entry unitEnt = new Entry
         {
-            FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Label)) * 1,
+            FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Entry)) * 1,
         };
         Entry countEnt = new Entry
         {
-            FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Label)) * 1,
+            Keyboard= Keyboard.Numeric,
+            FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Entry)) * 1,
         };
         Entry dateEnt = new Entry
         {
-            FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Label)) * 1,
+            FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Entry)) * 1,
         };
         Label nameLab = new Label()
         {
@@ -49,7 +52,11 @@ namespace WeekMenu
         public EditOrCreateProductPage (int idOfProduct)
 		{
             this.idOfProduct = idOfProduct;
-            
+            if (idOfProduct == 0)
+                Title = "Добавление";
+            else
+                Title = "Изменение";
+            BackgroundColor = Color.White;
             if (idOfProduct != 0)
             {
             var pr = App.Database.ProductsList.Find(p => p.Id == idOfProduct);
@@ -60,23 +67,34 @@ namespace WeekMenu
             }
             Button ok = new Button
             {
-                Text = "Принять"
+                Text = "ПРИНЯТЬ"
             };
             ok.Clicked += Ok_Clicked;
 
             Button cancel = new Button
             {
-                Text = "Отменить"
+                Text = "ОТМЕНИТЬ"
             };
             cancel.Clicked += Cancel_Clicked;
+
+            ToolbarItem deleteItem = new ToolbarItem
+            {
+                Text = "УДАЛИТЬ",
+                Order = ToolbarItemOrder.Primary,
+                Priority = 0
+            };
+            deleteItem.Clicked += DeleteItem_Clicked;
+            ToolbarItems.Add(deleteItem);
+
             Content = new StackLayout {
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.CenterAndExpand,
+                VerticalOptions = LayoutOptions.FillAndExpand,
                 Padding = new Thickness(2, 2, 2, 2),
                 Children = {
 					nameLab, nameEnt, countLab,countEnt,unitLab,unitEnt, dateLab,dateEnt,
                     new StackLayout
                     {
+                        Padding = new Thickness(2, 2, 2, 2),
                         HorizontalOptions = LayoutOptions.End,
                         Orientation = StackOrientation.Horizontal,
                         Children = {ok,cancel}
@@ -84,6 +102,23 @@ namespace WeekMenu
 				}
 			};
 		}
+
+        private async void DeleteItem_Clicked(object sender, EventArgs e)
+        {
+            if (!await DisplayAlert("Удаление", "Вы уверены, что хотите удалить продукт?", "Да", "Нет"))
+            {
+                return;
+            }
+            if (idOfProduct != 0)
+            {
+                App.Database.Database.Delete<Product>(idOfProduct);
+                App.Database.ProductsList.RemoveAll(p => p.Id == idOfProduct);
+                App.Database.ProductsViewList.RemoveAll(p => p.Id == idOfProduct);
+                Changed(this);
+            }
+            await DisplayAlert("Удаление", "Продукт успешно удалён", "Ок");
+            await Navigation.PopAsync();
+        }
 
         private async void Cancel_Clicked(object sender, EventArgs e)
         {
@@ -97,27 +132,76 @@ namespace WeekMenu
                 await DisplayAlert("Ошибка", "Все поля должны быть заполнены", "Ок");
                 return;
             }
-           
-            if (App.Database.NamesOfProudcts.Count(p => p.Value.Name == nameEnt.Text)!=0)
-            {
-                var tmp = App.Database.NamesOfProudcts.First(p => p.Value.Name == nameEnt.Text);
-                if (tmp.Value.Unit!=unitEnt.Text)
-                {
-                    await DisplayAlert("Предупреждение", "Вы изменили единицу измерения для этого продукта. Если вы продолжите, она изменится для всех таких же продуктов, а так же в Меню", "Вы хотите продолжить?", "Продолжить", "Отменить" );
-                }
-                if (idOfProduct == 0)
-            {
 
-                App.Database.Database.Insert();
+            if (!double.TryParse(countEnt.Text, out var tmp))
+            {
+                await DisplayAlert("Ошибка", "В поле кол-во должно находиться число", "Ок");
+                return;
             }
-                Database.Update(item);
-                    return item.Id;
-                else
+
+            //if (!DateTime.TryParse(dateEnt.Text, out var tmpd))
+            //{
+            //    await DisplayAlert("Ошибка", "В поле срок годности должна находиться дата", "Ок");
+            //    return;
+            //}
+
+            ProductName nameOfP;
+
+            if (App.Database.NamesOfProudcts.Count(p => p.Value.Name == nameEnt.Text) != 0)
+            {
+                nameOfP = App.Database.NamesOfProudcts.First(p => p.Value.Name == nameEnt.Text).Value;
+                if (nameOfP.Unit != unitEnt.Text)
                 {
+                    if (!await DisplayAlert("Предупреждение!", "Вы изменили единицу измерения для \"" + nameEnt.Text +
+                        "\". Если вы продолжите, она изменится для всех продуктов с таким названием!", "Продолжить", "Отменить"))
+                        return;
+                    else
+                    {
+                        App.Database.NamesOfProudcts[nameOfP.Id].Unit= unitEnt.Text;
+                        App.Database.Database.Update(App.Database.NamesOfProudcts[nameOfP.Id]);
+                    }
                 }
             }
+            else
+            {
+                nameOfP = new ProductName { Id = 0, Name = nameEnt.Text, Unit = unitEnt.Text };
+                App.Database.Database.Insert(nameOfP);
+                App.Database.NamesOfProudcts[nameOfP.Id] = nameOfP;
+            }
+
+            if (idOfProduct == 0)
+            {
+                Product prod = new Product
+                {
+                    Id = 0,
+                    Count = double.Parse(countEnt.Text),
+                    NameId = nameOfP.Id,
+                    ExpirationDate = dateEnt.Text
+                };
+                App.Database.Database.Insert(prod);
+                App.Database.ProductsList.Add(prod);
+                App.Database.ProductsViewList.Add(new ProductView
+                {
+                    Id = prod.Id,
+                    CountAndUnit = prod.Count.ToString() + " " + nameOfP.Unit,
+                    Name = nameOfP.Name,
+                    ExpirationDate = prod.ExpirationDate
+                });
+            }
+            else
+            {
+                var prod = App.Database.ProductsList.First(p => p.Id == idOfProduct);
+                prod.NameId = nameOfP.Id;
+                prod.Count = double.Parse(countEnt.Text);
+                prod.ExpirationDate = dateEnt.Text;
+                App.Database.Database.Update(prod);
+                var prV = App.Database.ProductsViewList.First(p => p.Id == prod.Id);
+                prV.Name = nameOfP.Name;
+                prV.ExpirationDate = prod.ExpirationDate;
+                prV.CountAndUnit = prod.Count.ToString() + " " + nameOfP.Unit;
+            }
+            Changed(this);
             await Navigation.PopAsync();
-
         }
     }
 }

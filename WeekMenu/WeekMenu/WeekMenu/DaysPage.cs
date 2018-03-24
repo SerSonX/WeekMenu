@@ -48,7 +48,7 @@ namespace WeekMenu
                     }
                 };
             });
-            listView.ItemSelected += ListView_ItemSelected;
+            listView.ItemTapped += ListView_ItemTapped;
             Title = "Меню на неделю";
             Content = new StackLayout {
                 Children = {
@@ -57,10 +57,11 @@ namespace WeekMenu
 			};
 		}
 
-        private async void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        private async void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            var s = ((sender as ListView).SelectedItem as DayOfWeek).Day;
-            int i=0;
+            (sender as ListView).SelectedItem = null;
+            var s = (e.Item as DayOfWeek).Day;
+            int i = 0;
             switch (s)
             {
                 case "Понедельник":

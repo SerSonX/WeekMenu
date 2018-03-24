@@ -24,7 +24,7 @@ namespace WeekMenu
             mainPage = mdp;
             Button about = new Button
             {
-                Text = "О нас",
+                Text = "О программе",
             };
             about.Clicked += About_Clicked;
             setButtonSettings(about);
@@ -52,7 +52,7 @@ namespace WeekMenu
                 //VerticalOptions = LayoutOptions.FillAndExpand,
                 Padding = new Thickness(0, 0, 0, 0),
                 Children = {
-                    menu,products,settings,about }
+                    menu,products,/*settings,*/about }
             };
 		}
 
@@ -60,7 +60,7 @@ namespace WeekMenu
         {
             mainPage.Detail = new NavigationPage(new DaysPage())
             {
-                BarBackgroundColor = Color.FromHex("76ff03")
+                BarBackgroundColor = Color.FromHex("90caf9")
             };
             mainPage.IsPresented = false;
         }
@@ -69,7 +69,7 @@ namespace WeekMenu
         {
             mainPage.Detail = new NavigationPage(new ProductsPage())
             {
-                BarBackgroundColor = Color.FromHex("76ff03")
+                BarBackgroundColor = Color.FromHex("90caf9")
             };
             mainPage.IsPresented = false;
         }
@@ -78,7 +78,7 @@ namespace WeekMenu
         {
             mainPage.Detail = new NavigationPage(new AboutPage())
             {
-                BarBackgroundColor = Color.FromHex("76ff03")
+                BarBackgroundColor = Color.FromHex("90caf9")
             };
             mainPage.IsPresented = false;
         }

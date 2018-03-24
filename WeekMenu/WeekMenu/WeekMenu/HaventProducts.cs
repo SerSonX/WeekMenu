@@ -7,15 +7,13 @@ using Xamarin.Forms;
 
 namespace WeekMenu
 {
-    public class ProductsPage : ContentPage
-    {
-
-        private ListView productList = new ListView();
-
-        public ProductsPage()
-        {
+	public class HaventProducts : ContentPage
+	{
+		public HaventProducts ()
+		{
             BackgroundColor = Color.White;
-            Title = "Продукты";
+            Title = "Недостающие продукты";
+            ListView productList = new ListView();
             productList.ItemsSource = App.Database.ProductsViewList;
             productList.ItemTemplate = new DataTemplate(() =>
             {
@@ -35,30 +33,19 @@ namespace WeekMenu
                 };
                 countAndUnitLabel.SetBinding(Label.TextProperty, "CountAndUnit");
 
-                Label expirationDateLabel = new Label
-                {
-                    HorizontalTextAlignment = TextAlignment.Center,
-                    VerticalTextAlignment = TextAlignment.Center,
-                    FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Label)) * 1
-                };
-                expirationDateLabel.SetBinding(Label.TextProperty, "ExpirationDate");
-
                 Grid cellGrid = new Grid
                 {
                     HorizontalOptions = LayoutOptions.FillAndExpand
                 };
                 cellGrid.Children.Add(nameLabel, 0, 2, 0, 1);
                 cellGrid.Children.Add(countAndUnitLabel, 2, 3, 0, 1);
-                cellGrid.Children.Add(expirationDateLabel, 3, 5, 0, 1);
 
                 return new ViewCell
                 {
                     View = cellGrid
                 };
             });
-
-            productList.ItemTapped += ProductList_ItemTapped;
-
+            productList.IsEnabled = false;
             Grid titleGrid = new Grid()
             {
                 BackgroundColor = Color.White,
@@ -87,24 +74,6 @@ namespace WeekMenu
                 FontSize =
                Device.GetNamedSize(NamedSize.Default, typeof(Label)) * 1.1
             }, 2, 3, 0, 1);
-            titleGrid.Children.Add(new Label
-            {
-                HorizontalTextAlignment = TextAlignment.Center,
-                VerticalTextAlignment = TextAlignment.Center,
-                BackgroundColor = Color.FromHex("c3fdff"),
-                FontAttributes = FontAttributes.Bold,
-                Text = " Срок годости",
-                FontSize =
-               Device.GetNamedSize(NamedSize.Default, typeof(Label)) * 1.1
-            }, 3, 5, 0, 1);
-            ToolbarItem addItem = new ToolbarItem
-            {
-                Text = "ДОБАВИТЬ",
-                Order = ToolbarItemOrder.Primary,
-                Priority = 0
-            };
-            addItem.Clicked += AddItem_Clicked;
-            ToolbarItems.Add(addItem);
 
             Content = new StackLayout
             {
@@ -117,35 +86,6 @@ namespace WeekMenu
                     productList
                 }
             };
-
-
         }
-
-        public void Refresh()
-        {
-            productList.ItemsSource = null;
-            productList.ItemsSource = App.Database.ProductsViewList;
-        }
-
-        private async void ProductList_ItemTapped(object sender, ItemTappedEventArgs e)
-        {
-            (sender as ListView).SelectedItem = null;
-            var id = (e.Item as ProductView).Id;
-            var edPage = new EditOrCreateProductPage(id);
-            edPage.Changed += EdPage_Changed;
-            await Navigation.PushAsync(edPage);
-        }
-
-        private async void AddItem_Clicked(object sender, EventArgs e)
-        {
-            var edPage = new EditOrCreateProductPage(0);
-            edPage.Changed += EdPage_Changed;
-            await Navigation.PushAsync(edPage);
-        }
-
-        private void EdPage_Changed(object sender)
-        {
-            Refresh();
-        }
-    }
+	}
 }

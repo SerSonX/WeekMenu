@@ -2,7 +2,7 @@
 using System.Linq;
 using SQLite;
 using Xamarin.Forms;
-
+using System.Collections.ObjectModel;
 namespace WeekMenu
 {
     public class Repository
@@ -31,7 +31,7 @@ namespace WeekMenu
             }
         }
 
-        private List<ProductView> productsViewList;
+        public List<ProductView> productsViewList;
         public List<ProductView> ProductsViewList
         {
             get
@@ -47,13 +47,58 @@ namespace WeekMenu
                 return productsViewList;
             }
         }
+
+        private List<Dish> dishesList;
+        public List<Dish> DishesList
+        {
+            get
+            {
+                if (dishesList == null)
+                    dishesList = Database.Table<Dish>().ToList();
+                return dishesList;
+            }
+        }
+
+        private List<DayAndDish> daysAndDishesList;
+        public List<DayAndDish> DaysAndDishesList
+        {
+            get
+            {
+                if (daysAndDishesList == null)
+                    daysAndDishesList = Database.Table<DayAndDish>().Select(p => p).ToList();
+                return daysAndDishesList;
+            }
+        }
+
+        private List<Ingredient> ingredientsList;
+        public List<Ingredient> IngredientsList
+        {
+            get
+            {
+                if (ingredientsList == null)
+                    ingredientsList = Database.Table<Ingredient>().Select(p => p).ToList();
+                return ingredientsList;
+            }
+        }
+
+        
+
         public Repository(string filename)
         {
             string databasePath = DependencyService.Get<ISQLite>().GetDatabasePath(filename);
             Database = new SQLiteConnection(databasePath);
             Database.CreateTable<Product>();
             Database.CreateTable<ProductName>();
+            Database.CreateTable<Ingredient>();
+            Database.CreateTable<Dish>();
+            Database.CreateTable<DayAndDish>();
         }
+
+
+
+
+
+
         public IEnumerable<Product> GetItems()
         {
             return (from i in Database.Table<Product>() select i).ToList();

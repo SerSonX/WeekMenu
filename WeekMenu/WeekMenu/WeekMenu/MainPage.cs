@@ -16,7 +16,7 @@ namespace WeekMenu
             //Detail = new NavigationPage(new AboutPage());
             Detail = new NavigationPage(new ProductsPage())
             {
-                BarBackgroundColor = Color.FromHex("76ff03")
+                BarBackgroundColor = Color.FromHex("90caf9")
             };
 
         }
