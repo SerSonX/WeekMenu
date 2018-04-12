@@ -2,6 +2,7 @@
 using System.Linq;
 using SQLite;
 using Xamarin.Forms;
+using System;
 using System.Collections.ObjectModel;
 namespace WeekMenu
 {
@@ -37,13 +38,17 @@ namespace WeekMenu
             get
             {
                 if (productsViewList == null)
+                {
                     productsViewList = ProductsList.Select(p => new ProductView
                     {
                         Id = p.Id,
                         Name = NamesOfProudcts[p.NameId].Name,
                         CountAndUnit = p.Count.ToString() + " " + NamesOfProudcts[p.NameId].Unit,
-                        ExpirationDate = p.ExpirationDate
+                        ExpirationDate = p.ExpirationDate,
+                        Good = (Convert.ToDateTime(p.ExpirationDate) >= DateTime.Now.Date ?
+                        Color.FromHex("33ff00") : Color.FromHex("ff3300"))
                     }).ToList();
+                }
                 return productsViewList;
             }
         }

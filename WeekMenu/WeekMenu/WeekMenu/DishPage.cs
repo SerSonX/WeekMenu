@@ -7,8 +7,8 @@ using Xamarin.Forms;
 
 namespace WeekMenu
 {
-	public class DishPage : ContentPage
-	{
+    public class DishPage : ContentPage
+    {
         public delegate void EventHandler(object sender);
         public event EventHandler Changed;
         public event EventHandler Cooked;
@@ -17,19 +17,24 @@ namespace WeekMenu
         ListView listView = new ListView();
 
         private int id;
-		public DishPage (int id)
-		{
+
+        private DayAndDish dayAndDish;
+
+        public DishPage(int id)
+        {
             this.id = id;
             BackgroundColor = Color.White;
 
-            var dish = App.Database.DishesList.Find(d => d.Id == id);
+            dayAndDish = App.Database.DaysAndDishesList.Find(d => d.Id == id);
+
+            var dish = App.Database.DishesList.Find(d => d.Id == dayAndDish.DishId);
 
             Title = dish.Name;
 
-            ingridients = App.Database.IngredientsList.FindAll(i => i.DishId == id).
-                Select(i => new IngredientView { Id = i.Id, CountAndUnit = i.Count.ToString()+
-                " "+ App.Database.NamesOfProudcts[i.ProductNameId].Unit,
-                Name = App.Database.NamesOfProudcts[i.ProductNameId].Name}).ToList();
+            ingridients = App.Database.IngredientsList.FindAll(i => i.DishId == dish.Id).
+                Select(i => new IngredientView { Id = i.Id, CountAndUnit = i.Count.ToString() +
+                " " + App.Database.NamesOfProudcts[i.ProductNameId].Unit,
+                    Name = App.Database.NamesOfProudcts[i.ProductNameId].Name }).ToList();
 
             listView.ItemsSource = ingridients;
             listView.IsEnabled = false;
@@ -93,14 +98,23 @@ namespace WeekMenu
                Device.GetNamedSize(NamedSize.Default, typeof(Label)) * 1.1
             }, 2, 3, 0, 1);
 
-            ToolbarItem changeItem = new ToolbarItem
+            //ToolbarItem changeItem = new ToolbarItem
+            //{
+            //    Text = "ИЗМЕНИТЬ",
+            //    Order = ToolbarItemOrder.Primary,
+            //    Priority = 1
+            //};
+            //changeItem.Clicked += ChangeItem_Clicked;
+            //ToolbarItems.Add(changeItem);
+
+            ToolbarItem deleteItem = new ToolbarItem
             {
-                Text = "ИЗМЕНИТЬ",
+                Text = "УДАЛИТЬ",
                 Order = ToolbarItemOrder.Primary,
-                Priority = 1
+                Priority = 0
             };
-            changeItem.Clicked += ChangeItem_Clicked;
-            ToolbarItems.Add(changeItem);
+            deleteItem.Clicked += DeleteItem_Clicked;
+            ToolbarItems.Add(deleteItem);
 
             ToolbarItem isCookedItem = new ToolbarItem
             {
@@ -118,23 +132,33 @@ namespace WeekMenu
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 Children =
                 {
-                   titleGrid,
+                   //titleGrid,
                    listView
                 }
             };
         }
 
+        private async void DeleteItem_Clicked(object sender, EventArgs e)
+        {
+            if (!await DisplayAlert("Удаление", "Вы уверены, что хотите удалить блюдо из меню?", "Да", "Нет"))
+            {
+                return;
+            }
+            App.Database.Database.Delete<DayAndDish>(id);
+            App.Database.DaysAndDishesList.Remove(dayAndDish);
+            await DisplayAlert("Удаление", "Блюдо успешно удалено", "Ок");
+            Changed(this);
+            await Navigation.PopAsync();
+        }
+
         private void IsCookedItem_Clicked(object sender, EventArgs e)
         {
-            foreach (var i in App.Database.IngredientsList.FindAll(i => i.DishId == id))
+            foreach (var i in App.Database.IngredientsList.FindAll(i => i.DishId == dayAndDish.DishId))
             {
                 var count = i.Count;
-                foreach(var j in App.Database.ProductsList.Where(p => p.NameId == i.ProductNameId).OrderBy((p) =>
-                {
-                    //var tmp = p.ExpirationDate.Split('.');
-                    var tmp = DateTime.Parse(p.ExpirationDate);
-                    return tmp;
-                }))
+                List<Product> deleted = new List<Product>();
+                foreach(var j in App.Database.ProductsList.Where(p => p.NameId == i.ProductNameId
+                && (Convert.ToDateTime(p.ExpirationDate) >= DateTime.Now.Date)))
                 {
                     if (j.Count>count)
                     {
@@ -148,7 +172,7 @@ namespace WeekMenu
                     {
                         App.Database.Database.Delete(j);
                         App.Database.ProductsViewList.RemoveAll(p => p.Id == j.Id);
-                        App.Database.ProductsList.Remove(j);//or Create remove list
+                        deleted.Add(j);
                         break;
                     }
                     else
@@ -156,11 +180,16 @@ namespace WeekMenu
                         count -= j.Count;
                         App.Database.Database.Delete(j);
                         App.Database.ProductsViewList.RemoveAll(p => p.Id == j.Id);
-                        App.Database.ProductsList.Remove(j);
+                        deleted.Add(j);
                     }
+                    if (deleted.Count>0)
+                        App.Database.productsViewList = null;
+                }
+                foreach (var item in deleted)
+                {
+                    App.Database.ProductsList.Remove(item);
                 }
             }
-            Cooked(this);
         }
 
         private async void ChangeItem_Clicked(object sender, EventArgs e)

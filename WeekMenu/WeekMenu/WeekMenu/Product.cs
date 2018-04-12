@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using SQLite;
+using Xamarin.Forms;
 
 namespace WeekMenu
 {
@@ -29,6 +30,7 @@ namespace WeekMenu
         public string Name { get; set; }
         public string CountAndUnit { get; set; }
         public string ExpirationDate { get; set; }
+        public Color Good { get; set; }
 
     }
 
@@ -63,6 +65,21 @@ namespace WeekMenu
         public int Id { get; set; }
         public string Name { get; set; }
         public int Type { get; set; }
+        public String TypeName
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case 0: return "Завтрак";
+                    case 1: return "Второй завтрак";
+                    case 2: return "Обед";
+                    case 3: return "Полдник";
+                    case 4: return "Ужин";
+                    default: return "Перекус";
+                }
+            }
+        }
     }
 
     [Table("DaysAndDishes")]

@@ -34,7 +34,6 @@ namespace WeekMenu
                     FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Label)) * 1
                 };
                 countAndUnitLabel.SetBinding(Label.TextProperty, "CountAndUnit");
-
                 Label expirationDateLabel = new Label
                 {
                     HorizontalTextAlignment = TextAlignment.Center,
@@ -42,6 +41,8 @@ namespace WeekMenu
                     FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Label)) * 1
                 };
                 expirationDateLabel.SetBinding(Label.TextProperty, "ExpirationDate");
+                BoxView good = new BoxView();
+                good.SetBinding(BoxView.ColorProperty, "Good");
 
                 Grid cellGrid = new Grid
                 {
@@ -50,10 +51,18 @@ namespace WeekMenu
                 cellGrid.Children.Add(nameLabel, 0, 2, 0, 1);
                 cellGrid.Children.Add(countAndUnitLabel, 2, 3, 0, 1);
                 cellGrid.Children.Add(expirationDateLabel, 3, 5, 0, 1);
-
+                cellGrid.Children.Add(good, 5, 6, 0, 1);
                 return new ViewCell
                 {
-                    View = cellGrid
+                    View = new StackLayout
+                    {
+                        Orientation = StackOrientation.Horizontal,
+                        HorizontalOptions = LayoutOptions.FillAndExpand,
+                        VerticalOptions = LayoutOptions.FillAndExpand,
+                        Children = {
+                            cellGrid 
+                    }
+                    }
                 };
             });
 
@@ -97,6 +106,7 @@ namespace WeekMenu
                 FontSize =
                Device.GetNamedSize(NamedSize.Default, typeof(Label)) * 1.1
             }, 3, 5, 0, 1);
+
             ToolbarItem addItem = new ToolbarItem
             {
                 Text = "ДОБАВИТЬ",
@@ -113,7 +123,7 @@ namespace WeekMenu
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 Children =
                 {
-                   titleGrid,
+                   //titleGrid,
                     productList
                 }
             };

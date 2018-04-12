@@ -11,38 +11,28 @@ namespace WeekMenu
 	{
         int dayOfWeek;
 
-        public Label[] typesOfMeal = new Label[]
-        {
-            new Label{Text = "Завтрак" }, new Label {Text = "Второй завтрак"},
-            new Label {Text = "Обед"}, new Label {Text = "Полдник"},
-            new Label {Text = "Ужин"}, new Label {Text = "Перекус" }
-        };
+        private ListView dayMenuList;
 
-        private ListView[] dayMenuList = new ListView[6];
-
-        private List<DishesInDayView>[] dishesInDayViewList;
-        public List<DishesInDayView>[] DishesInDayViewList
+        private List<DishesInDayView> dishesInDayViewList;
+        public List<DishesInDayView> DishesInDayViewList
         {
             get
             {
                 if (dishesInDayViewList == null)
                 {
-                    dishesInDayViewList = new List<DishesInDayView>[6];
-                    for (int i = 0; i < 6; i++)
-                    {
-                        dishesInDayViewList[i] = App.Database.DaysAndDishesList.
-                            Where(d => d.Day == dayOfWeek && d.Type == i).
+                    dishesInDayViewList = App.Database.DaysAndDishesList.
+                            Where(d => d.Day == dayOfWeek).
                             Select(d => new DishesInDayView
                             {
-                                Id = d.DishId,
+                                Id = d.Id,
                                 Name = App.Database.DishesList.First(q => q.Id==d.DishId).Name,
                                 Type = d.Type
-                            }).ToList();
-                    }
+                            }).OrderBy(d => d.Type).ToList();
                 }
                 return dishesInDayViewList;
             }
         }
+
 
         public DayMenuPage (int dayOfWeek)
 		{
@@ -50,70 +40,42 @@ namespace WeekMenu
             this.dayOfWeek = dayOfWeek;
             Title = dayByNumber(dayOfWeek);
 
-            for (int i = 0; i < 6; i++)
+            dayMenuList = new ListView()
             {
-                dayMenuList[i] = new ListView();
-                dayMenuList[i].ItemsSource = DishesInDayViewList[i];
-                dayMenuList[i].ItemTemplate = new DataTemplate(() =>
-                {
-                    Label nameLabel = new Label
-                    {
-                        HorizontalTextAlignment = TextAlignment.Center,
-                        VerticalTextAlignment = TextAlignment.Center,
-                        FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Label)) * 1.2
-                    };
-                    nameLabel.SetBinding(Label.TextProperty, "Name");
-
-                    Label timeLabel = new Label
-                    {
-                        HorizontalTextAlignment = TextAlignment.Center,
-                        VerticalTextAlignment = TextAlignment.Center,
-                        FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Label)) * 1.2
-                    };
-                    timeLabel.SetBinding(Label.TextProperty, "Time");
-
-                    Grid cellGrid = new Grid
-                    {
-                        HorizontalOptions = LayoutOptions.FillAndExpand
-                    };
-                    cellGrid.Children.Add(nameLabel, 0, 2, 0, 1);
-                    cellGrid.Children.Add(timeLabel, 2, 4, 0, 1);
-
-                    return new ViewCell
-                    {
-                        View = cellGrid
-                    };
-                });
-                dayMenuList[i].ItemTapped += DayMenuList_ItemTapped;
-            }
-            Grid titleGrid = new Grid()
-            {
-                BackgroundColor = Color.White,
-                ColumnSpacing = 2,
-                RowSpacing = 2
+                VerticalOptions = LayoutOptions.FillAndExpand
             };
-
-            titleGrid.Children.Add(new Label
+            dayMenuList.ItemsSource = DishesInDayViewList;
+            dayMenuList.ItemTemplate = new DataTemplate(() =>
             {
-                BackgroundColor = Color.FromHex("c3fdff"),
-                Text = " Блюдо",
-                FontAttributes = FontAttributes.Bold,
-                HorizontalTextAlignment = TextAlignment.Center,
-                VerticalTextAlignment = TextAlignment.Center,
-                FontSize =
-               Device.GetNamedSize(NamedSize.Default, typeof(Label)) * 1.2
-            }, 0, 2, 0, 1);
+                Label nameLabel = new Label
+                {
+                    HorizontalTextAlignment = TextAlignment.Center,
+                    VerticalTextAlignment = TextAlignment.Center,
+                    FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Label)) * 1.2
+                };
+                nameLabel.SetBinding(Label.TextProperty, "Name");
 
-            titleGrid.Children.Add(new Label
-            {
-                HorizontalTextAlignment = TextAlignment.Center,
-                VerticalTextAlignment = TextAlignment.Center,
-                BackgroundColor = Color.FromHex("c3fdff"),
-                FontAttributes = FontAttributes.Bold,
-                Text = " Время",
-                FontSize =
-               Device.GetNamedSize(NamedSize.Default, typeof(Label)) * 1.2
-            }, 2, 3, 0, 1);
+                Label typeLabel = new Label
+                {
+                    HorizontalTextAlignment = TextAlignment.Center,
+                    VerticalTextAlignment = TextAlignment.Center,
+                    FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Label)) * 1.2
+                };
+                typeLabel.SetBinding(Label.TextProperty, "TypeName");
+
+                Grid cellGrid = new Grid
+                {
+                    HorizontalOptions = LayoutOptions.FillAndExpand
+                };
+                cellGrid.Children.Add(nameLabel, 0, 2, 0, 1);
+                cellGrid.Children.Add(typeLabel, 2, 4, 0, 1);
+
+                return new ViewCell
+                {
+                    View = cellGrid
+                };
+            });
+            dayMenuList.ItemTapped += DayMenuList_ItemTapped;
          
             ToolbarItem addItem = new ToolbarItem
             {
@@ -137,20 +99,16 @@ namespace WeekMenu
             {
                 Padding = new Thickness(1, 2, 1, 1),
                 BackgroundColor = Color.White,
-                HorizontalOptions = LayoutOptions.FillAndExpand
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.FillAndExpand
             };
-            content.Children.Add(titleGrid);
-            for (int i = 0; i < 6; i++)
-            {
-                content.Children.Add(typesOfMeal[i]);
-                content.Children.Add(dayMenuList[i]);
-            }
+            content.Children.Add(dayMenuList);
             Content = content;
         }
 
         private async void ListOfProductItem_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new HaventProducts());
+            await Navigation.PushAsync(new HaventProducts(dayOfWeek));
         }
 
         private async void AddItem_Clicked(object sender, EventArgs e)
@@ -181,19 +139,16 @@ namespace WeekMenu
 
         void Refresh()
         {
-            for (int i = 0; i < 6; i++)
-            {
-                dishesInDayViewList[i] = App.Database.DaysAndDishesList.
-                    Where(d => d.Day == dayOfWeek && d.Type == i).
-                    Select(d => new DishesInDayView
-                    {
-                        Id = d.DishId,
-                        Name = App.Database.DishesList.First(q => q.Id == d.DishId).Name,
-                        Type = d.Type
-                    }).ToList();
-                dayMenuList[i].ItemsSource = null;
-                dayMenuList[i].ItemsSource = DishesInDayViewList[i];
-            }
+            dishesInDayViewList = App.Database.DaysAndDishesList.
+                            Where(d => d.Day == dayOfWeek).
+                            Select(d => new DishesInDayView
+                            {
+                                Id = d.Id,
+                                Name = App.Database.DishesList.First(q => q.Id == d.DishId).Name,
+                                Type = d.Type
+                            }).OrderBy(d => d.Type).ToList();
+            dayMenuList.ItemsSource = null;
+            dayMenuList.ItemsSource = DishesInDayViewList;
         }
 
         string dayByNumber(int number)

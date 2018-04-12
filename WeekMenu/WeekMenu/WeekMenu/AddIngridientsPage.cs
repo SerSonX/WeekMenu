@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Globalization;
 using Xamarin.Forms;
 
 namespace WeekMenu
@@ -90,7 +90,6 @@ namespace WeekMenu
             };
             count = new Entry
             {
-                Keyboard = Keyboard.Numeric,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Entry)) * 1,
             };
@@ -205,7 +204,10 @@ namespace WeekMenu
                 return;
             }
 
-            if (!double.TryParse(count.Text, out var tmp))
+            double countD;
+            if (!double.TryParse(count.Text, NumberStyles.Any, CultureInfo.CurrentCulture, out countD) &&
+                !double.TryParse(count.Text, NumberStyles.Any, CultureInfo.GetCultureInfo("en-US"), out countD) &&
+                !double.TryParse(count.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out countD))
             {
                 await DisplayAlert("Ошибка", "В поле кол-во должно находиться число", "Ок");
                 return;
@@ -227,6 +229,7 @@ namespace WeekMenu
                     {
                         App.Database.NamesOfProudcts[nameOfP.Id].Unit = unit.Text;
                         App.Database.Database.Update(App.Database.NamesOfProudcts[nameOfP.Id]);
+                        App.Database.productsViewList = null;
                     }
                 }
             }
@@ -240,7 +243,7 @@ namespace WeekMenu
             var i = new Ingredient
             {
                 Id = 0,
-                Count = double.Parse(count.Text),
+                Count = countD,
                 DishId = idOfDish,
                 ProductNameId = nameOfP.Id
             };

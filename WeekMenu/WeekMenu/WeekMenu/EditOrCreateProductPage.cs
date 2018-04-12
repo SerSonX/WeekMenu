@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Globalization;
 using Xamarin.Forms;
 
 namespace WeekMenu
@@ -22,7 +22,6 @@ namespace WeekMenu
         };
         Entry countEnt = new Entry
         {
-            Keyboard= Keyboard.Numeric,
             FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Entry)) * 1,
         };
         Entry dateEnt = new Entry
@@ -133,17 +132,21 @@ namespace WeekMenu
                 return;
             }
 
-            if (!double.TryParse(countEnt.Text, out var tmp))
+            double count;
+            if (!double.TryParse(countEnt.Text, NumberStyles.Any, CultureInfo.CurrentCulture, out count) &&
+                !double.TryParse(countEnt.Text, NumberStyles.Any, CultureInfo.GetCultureInfo("en-US"), out count) &&
+                !double.TryParse(countEnt.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out count))
             {
                 await DisplayAlert("Ошибка", "В поле кол-во должно находиться число", "Ок");
                 return;
             }
 
-            //if (!DateTime.TryParse(dateEnt.Text, out var tmpd))
-            //{
-            //    await DisplayAlert("Ошибка", "В поле срок годности должна находиться дата", "Ок");
-            //    return;
-            //}
+            DateTime tmpd;
+            if (!DateTime.TryParse(dateEnt.Text, out tmpd))
+            {
+                await DisplayAlert("Ошибка", "В поле срок годности должна находиться дата", "Ок");
+                return;
+            }
 
             ProductName nameOfP;
 
@@ -174,7 +177,7 @@ namespace WeekMenu
                 Product prod = new Product
                 {
                     Id = 0,
-                    Count = double.Parse(countEnt.Text),
+                    Count = count,
                     NameId = nameOfP.Id,
                     ExpirationDate = dateEnt.Text
                 };
@@ -185,20 +188,24 @@ namespace WeekMenu
                     Id = prod.Id,
                     CountAndUnit = prod.Count.ToString() + " " + nameOfP.Unit,
                     Name = nameOfP.Name,
-                    ExpirationDate = prod.ExpirationDate
+                    ExpirationDate = prod.ExpirationDate,
+                    Good = (Convert.ToDateTime(prod.ExpirationDate) >= DateTime.Now.Date ?
+                        Color.FromHex("33ff00") : Color.FromHex("ff3300"))
                 });
             }
             else
             {
                 var prod = App.Database.ProductsList.First(p => p.Id == idOfProduct);
                 prod.NameId = nameOfP.Id;
-                prod.Count = double.Parse(countEnt.Text);
+                prod.Count = count;
                 prod.ExpirationDate = dateEnt.Text;
                 App.Database.Database.Update(prod);
                 var prV = App.Database.ProductsViewList.First(p => p.Id == prod.Id);
                 prV.Name = nameOfP.Name;
                 prV.ExpirationDate = prod.ExpirationDate;
                 prV.CountAndUnit = prod.Count.ToString() + " " + nameOfP.Unit;
+                prV.Good = (Convert.ToDateTime(prod.ExpirationDate) >= DateTime.Now.Date ?
+                        Color.FromHex("33ff00") : Color.FromHex("ff3300"));
             }
             Changed(this);
             await Navigation.PopAsync();

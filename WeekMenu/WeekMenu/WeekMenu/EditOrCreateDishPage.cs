@@ -83,6 +83,7 @@ namespace WeekMenu
             if (idOfDish != 0)
             {
                 App.Database.Database.Delete<Dish>(idOfDish);
+                App.Database.DishesList.Remove(App.Database.DishesList.Find(d => d.Id == idOfDish));
                 foreach (var d in App.Database.DaysAndDishesList.
                     Where(d => d.DishId == idOfDish))
                         App.Database.Database.Delete<DayAndDish>(d.Id);

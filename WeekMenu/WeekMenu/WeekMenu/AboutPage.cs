@@ -11,7 +11,7 @@ namespace WeekMenu
     {
         public AboutPage()
         {
-            Title = "О нас";
+            Title = "О программе";
             BackgroundColor = Color.White;
             Content = new StackLayout
             {
@@ -19,7 +19,7 @@ namespace WeekMenu
                 {
                     new Label
                     {
-                        Text = "Версия: 1.0"
+                        Text = "Версия: 0.9"
                     },
                     new Label
                     {
@@ -31,7 +31,15 @@ namespace WeekMenu
                     },
                     new Label
                     {
+                        Text = "E-mail: "
+                    },
+                    new Label
+                    {
                         Text = "Научный руководитель: Анфалов Евгений (Anf)."
+                    },
+                    new Label
+                    {
+                        Text = "E-mail: anfalovd10@yandex.ru"
                     }
 
                 }

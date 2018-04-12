@@ -87,21 +87,32 @@ namespace WeekMenu
         private async void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             (sender as ListView).SelectedItem = null;
+            string de = await DisplayActionSheet("Выберите дейтсвие", "Отмена", null,
+                "Добавить", "Изменить");
             var id = (e.Item as Dish).Id;
-            string s = await DisplayActionSheet("Выберите приём пищи", "Отмена", null,
-                "Завтрак", "Второй завтрак", "Обед", "Полдник", "Ужин", "Перекус");
-            if (s == "Отмена")
-                return;
-            var dd = new DayAndDish
+            if (de == "Изменить")
             {
-                Id = 0,
-                Day = dayOfWeek,
-                DishId = id,
-                Type = mealToInt(s)
-            };
-            App.Database.Database.Insert(dd);
-            App.Database.DaysAndDishesList.Add(dd);
-            Changed(this);
+                var edPage = new EditOrCreateDishPage(id);
+                edPage.Changed += EdPage_Changed;
+                await Navigation.PushAsync(edPage);
+            }
+            else if (de == "Добавить")
+            {
+                string s = await DisplayActionSheet("Выберите приём пищи", "Отмена", null,
+                    "Завтрак", "Второй завтрак", "Обед", "Полдник", "Ужин", "Перекус");
+                if (s == "Отмена")
+                    return;
+                var dd = new DayAndDish
+                {
+                    Id = 0,
+                    Day = dayOfWeek,
+                    DishId = id,
+                    Type = mealToInt(s)
+                };
+                App.Database.Database.Insert(dd);
+                App.Database.DaysAndDishesList.Add(dd);
+                Changed(this);
+            }
         }
 
         private async void AddDish_Clicked(object sender, EventArgs e)
@@ -114,6 +125,7 @@ namespace WeekMenu
         private void EdPage_Changed(object sender)
         {
             Refresh();
+            Changed(this);
         }
 
         public void Refresh()
