@@ -22,6 +22,7 @@ namespace WeekMenu
 		{
             BackgroundColor = Color.White;
             mainPage = mdp;
+            
             Button about = new Button
             {
                 Text = "О программе",

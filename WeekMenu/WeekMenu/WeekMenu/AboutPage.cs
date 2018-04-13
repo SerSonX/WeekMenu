@@ -31,7 +31,7 @@ namespace WeekMenu
                     },
                     new Label
                     {
-                        Text = "E-mail: "
+                        Text = "E-mail: SerSX@icloud.com"
                     },
                     new Label
                     {

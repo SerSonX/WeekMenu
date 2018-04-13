@@ -190,7 +190,7 @@ namespace WeekMenu
                     Name = nameOfP.Name,
                     ExpirationDate = prod.ExpirationDate,
                     Good = (Convert.ToDateTime(prod.ExpirationDate) >= DateTime.Now.Date ?
-                        Color.FromHex("33ff00") : Color.FromHex("ff3300"))
+                        Color.FromHex("75ff7a") : Color.FromHex("ff6666"))
                 });
             }
             else
@@ -205,7 +205,7 @@ namespace WeekMenu
                 prV.ExpirationDate = prod.ExpirationDate;
                 prV.CountAndUnit = prod.Count.ToString() + " " + nameOfP.Unit;
                 prV.Good = (Convert.ToDateTime(prod.ExpirationDate) >= DateTime.Now.Date ?
-                        Color.FromHex("33ff00") : Color.FromHex("ff3300"));
+                        Color.FromHex("75ff7a") : Color.FromHex("ff6666"));
             }
             Changed(this);
             await Navigation.PopAsync();

@@ -41,8 +41,9 @@ namespace WeekMenu
                     FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Label)) * 1
                 };
                 expirationDateLabel.SetBinding(Label.TextProperty, "ExpirationDate");
-                BoxView good = new BoxView();
-                good.SetBinding(BoxView.ColorProperty, "Good");
+                expirationDateLabel.SetBinding(Label.BackgroundColorProperty, "Good");
+                //BoxView good = new BoxView();
+                //good.SetBinding(BoxView.ColorProperty, "Good");
 
                 Grid cellGrid = new Grid
                 {
@@ -51,7 +52,7 @@ namespace WeekMenu
                 cellGrid.Children.Add(nameLabel, 0, 2, 0, 1);
                 cellGrid.Children.Add(countAndUnitLabel, 2, 3, 0, 1);
                 cellGrid.Children.Add(expirationDateLabel, 3, 5, 0, 1);
-                cellGrid.Children.Add(good, 5, 6, 0, 1);
+                //cellGrid.Children.Add(good, 5, 6, 0, 1);
                 return new ViewCell
                 {
                     View = new StackLayout

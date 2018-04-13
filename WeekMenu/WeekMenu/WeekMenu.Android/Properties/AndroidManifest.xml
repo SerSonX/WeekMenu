@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.companyname.WeekMenu">
-	<uses-sdk android:minSdkVersion="15" />
-	<application android:label="WeekMenu.Android"></application>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.SerSXAndAnf.WeekMenu" android:installLocation="auto">
+	<uses-sdk android:minSdkVersion="13" />
+	<application android:label="WeekMenu.Android" android:icon="@drawable/icon"></application>
 </manifest>

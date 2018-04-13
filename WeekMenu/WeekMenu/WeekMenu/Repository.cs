@@ -46,7 +46,7 @@ namespace WeekMenu
                         CountAndUnit = p.Count.ToString() + " " + NamesOfProudcts[p.NameId].Unit,
                         ExpirationDate = p.ExpirationDate,
                         Good = (Convert.ToDateTime(p.ExpirationDate) >= DateTime.Now.Date ?
-                        Color.FromHex("33ff00") : Color.FromHex("ff3300"))
+                        Color.FromHex("75ff7a") : Color.FromHex("ff6666"))
                     }).ToList();
                 }
                 return productsViewList;
